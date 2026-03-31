@@ -301,12 +301,61 @@ function e(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replac
 function h1(s){return '<div class="stitle">'+s+'</div>';}
 function yt(url,lbl){if(!url)return '<div style="background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:12px 14px;font-size:12px;color:var(--muted)">&#127916; Video coming soon</div>';return '<a class="ytb" href="'+e(url)+'" target="_blank"><span style="font-size:20px">&#9654;&#65039;</span><div><div style="font-size:11px;color:var(--red);font-weight:700;letter-spacing:1px;text-transform:uppercase">Watch on YouTube</div><div style="font-size:12px;color:var(--muted);margin-top:2px">'+e(lbl)+'</div></div><span style="margin-left:auto;font-size:16px;color:var(--muted)">&#8599;</span></a>';}
 
+function getStats(){
+  var s=JSON.parse(localStorage.getItem('tkd-sessions')||'[]');
+  var now=new Date(),wk=new Date(now-604800000);
+  var tw=s.filter(function(x){return new Date(x)>wk;}).length;
+  var streak=0,c=new Date();c.setHours(0,0,0,0);
+  for(var i=0;i<365;i++){
+    var ds=c.toDateString();
+    if(s.some(function(x){return new Date(x).toDateString()===ds;})){streak++;c.setDate(c.getDate()-1);}
+    else if(i===0){c.setDate(c.getDate()-1);}
+    else break;
+  }
+  return{total:s.length,week:tw,streak:streak};
+}
+function logSession(){
+  var s=JSON.parse(localStorage.getItem('tkd-sessions')||'[]');
+  var td=new Date().toDateString();
+  if(s.some(function(x){return new Date(x).toDateString()===td;})){alert('Already logged today! Great work!');return;}
+  s.push(new Date().toISOString());
+  localStorage.setItem('tkd-sessions',JSON.stringify(s));
+  render();
+}
 function rHome(){
-  return '<div class="hero"><div class="htxt"><div class="hgr">Welcome back, Warrior</div><div class="hnm">MASTER <span>DUTTON</span></div><div class="streak"><span class="sn">12</span><div><div style="font-size:10px;color:var(--gold);font-weight:700;letter-spacing:1px">DAY STREAK</div><div style="font-size:9px;color:var(--muted)">Keep it up!</div></div></div></div><div class="him" style="background-image:url(\''+PH+'\')"></div></div>'
-  +'<div class="srow"><div class="sc"><div class="scn">47</div><div class="scl">Sessions</div></div><div class="sc"><div class="scn">4</div><div class="scl">This Week</div></div><div class="sc"><div class="scn">38h</div><div class="scl">Total</div></div></div>'
-  
-  +'<div style="font-size:13px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Today\'s Training</div>'
-  +'<div style="background:linear-gradient(135deg,rgba(232,25,60,.08),rgba(232,25,60,.03));border:1px solid rgba(232,25,60,.2);border-radius:14px;padding:14px 16px;margin-bottom:12px"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">&#129355;</span><div><div style="font-size:15px;font-weight:700;color:var(--white)">Kicking Power Drills</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Front kick, turning kick, side kick combos</div></div></div><div style="margin-top:10px"><span class="tag">30 min</span> <span class="tag" style="color:var(--red);border-color:rgba(232,25,60,.3)">High</span></div></div>';
+  var st=getStats();
+  var lvl=st.total===0?'New!':st.total<10?'Beginner':st.total<50?'Student':st.total<100?'Warrior':'Master';
+  var sm=st.streak===0?'Start your streak!':st.streak+' day'+(st.streak>1?'s':'')+' - keep it up!';
+  var h='';
+  h+='<div class="hero">';
+  h+='<div class="htxt">';
+  h+='<div class="hgr">Welcome back, Warrior</div>';
+  h+='<div class="hnm">MASTER <span>DUTTON</span></div>';
+  h+='<div class="streak"><span class="sn">'+st.streak+'</span>';
+  h+='<div><div style="font-size:10px;color:var(--gold);font-weight:700;letter-spacing:1px">DAY STREAK</div>';
+  h+='<div style="font-size:9px;color:var(--muted)">'+sm+'</div></div></div>';
+  h+='</div>';
+  h+='<div class="him" style="background-image:url(\''+PH+'\')"></div>';
+  h+='</div>';
+  h+='<div class="srow">';
+  h+='<div class="sc"><div class="scn">'+st.total+'</div><div class="scl">Sessions</div></div>';
+  h+='<div class="sc"><div class="scn">'+st.week+'</div><div class="scl">This Week</div></div>';
+  h+='<div class="sc"><div class="scn" style="font-size:16px;margin-top:6px">'+lvl+'</div><div class="scl">Level</div></div>';
+  h+='</div>';
+  h+='<button onclick="logSession()" style="width:100%;background:linear-gradient(135deg,var(--red),#b01230);border:none;color:#fff;font-size:16px;font-weight:900;letter-spacing:2px;padding:14px;border-radius:14px;cursor:pointer;margin-bottom:14px;text-transform:uppercase;touch-action:manipulation">&#129355; LOG TRAINING SESSION</button>';
+  h+='<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px">';
+  h+='<div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">General Choi Hong Hi</div>';
+  h+='<div style="font-size:13px;color:var(--text);line-height:1.6;font-style:italic">&ldquo;The more you sweat in training, the less you bleed in battle.&rdquo;</div>';
+  h+='</div>';
+  h+='<div style="font-size:13px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Focus For Today</div>';
+  h+='<div style="background:linear-gradient(135deg,rgba(232,25,60,.08),rgba(232,25,60,.03));border:1px solid rgba(232,25,60,.2);border-radius:14px;padding:14px 16px;">';
+  h+='<div style="display:flex;align-items:center;gap:10px"><span style="font-size:28px">&#129355;</span>';
+  h+='<div><div style="font-size:15px;font-weight:700;color:var(--white)">Pattern Practice</div>';
+  h+='<div style="font-size:12px;color:var(--muted);margin-top:2px">Run through your grading patterns with focus on technique</div>';
+  h+='</div></div>';
+  h+='<div style="margin-top:10px"><span class="tag">30-45 min</span> <span class="tag" style="color:var(--gold);border-color:rgba(201,168,76,.3)">Technique</span></div>';
+  h+='</div>';
+  return h;
 }
 
 function rPats(){
