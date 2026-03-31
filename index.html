@@ -79,6 +79,12 @@ body{font-family:"Segoe UI",sans-serif;background:var(--bg);color:var(--text);di
 .pwd-input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--white);font-size:16px;padding:14px 16px;border-radius:12px;outline:none;font-family:inherit;margin-bottom:10px;text-align:center;letter-spacing:2px}
 .pwd-btn{width:100%;background:linear-gradient(135deg,var(--red),#b01230);border:none;color:#fff;font-size:18px;font-weight:900;letter-spacing:2px;padding:14px;border-radius:14px;cursor:pointer;text-transform:uppercase}
 .pwd-err{color:var(--red);font-size:13px;text-align:center;margin-bottom:10px;min-height:20px}
+
+.belt-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:8888;display:flex;align-items:flex-end;justify-content:center}
+.belt-sheet{background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-width:430px;padding:20px 20px 40px}
+.belt-opt{display:flex;align-items:center;padding:12px 16px;border-radius:12px;cursor:pointer;margin-bottom:6px;border:1px solid var(--border)}
+.belt-opt.sel{border-color:rgba(232,25,60,.4);background:rgba(232,25,60,.1)}
+.belt-dot{width:28px;height:12px;border-radius:6px;flex-shrink:0;margin-right:14px;border:1px solid rgba(255,255,255,.2)}
 </style></head><body>
 <div id="app">
 
@@ -96,7 +102,7 @@ body{font-family:"Segoe UI",sans-serif;background:var(--bg);color:var(--text);di
 
 <div class="spl" id="spl"><div style="font-size:60px;margin-bottom:8px">&#129355;</div><div class="sll">TAEKWON<span>-DO</span></div><div class="slln"></div><div style="font-size:22px;letter-spacing:2px;color:var(--gold);margin-top:4px;font-weight:700">MASTER DUTTON</div><div style="font-size:13px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:8px">ITF &middot; Scotland</div><div style="position:absolute;bottom:60px;font-size:11px;color:var(--muted);letter-spacing:2px">LOADING...</div></div>
 <div class="sbar"><span id="clock"></span><span id="datebar"></span></div>
-<div class="hdr"><div class="logo">TAEKWON<span>-DO</span></div><div class="badge">Red Belt</div></div>
+<div class="hdr"><div class="logo">TAEKWON<span>-DO</span></div><div class="badge" onclick="showBeltPicker()" style="cursor:pointer;user-select:none" id="belt-badge">Red Belt &#9662;</div></div>
 <div class="content" id="content"></div>
 <div class="bnav">
 <button class="tb a" onclick="sT('home')" id="t-home"><span class="ic">&#127968;</span><span class="lb">Home</span></button>
@@ -110,7 +116,7 @@ body{font-family:"Segoe UI",sans-serif;background:var(--bg);color:var(--text);di
 
 <script>
 var PH="data:image/jpeg;base64,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";
-var CT='home',PF='All',SP=null,MV=false,OM=null,BI=0,BC={},QL=null,QI=0,QS=null,QSC=0,QA=0,QF=false,QH=[],GS='',GO='Commands',TC='kicks',TL='All',TO=null;
+var CT='home',BELT=localStorage.getItem('tkd-belt')||'White Belt',PF='All',SP=null,MV=false,OM=null,BI=0,BC={},QL=null,QI=0,QS=null,QSC=0,QA=0,QF=false,QH=[],GS='',GO='Commands',TC='kicks',TL='All',TO=null;
 
 var PATS=[
 {id:0,name:"Saju Jirugi",moves:14,belt:"10th Gup (White)",diff:"Beginner",meaning:"4-Direction Punch. The first exercise taught to all beginners.",video:"https://youtu.be/MqcDfQKnTOA?si=-vXHnuM3LgB_W7CM"},
@@ -301,6 +307,47 @@ function e(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replac
 function h1(s){return '<div class="stitle">'+s+'</div>';}
 function yt(url,lbl){if(!url)return '<div style="background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:12px 14px;font-size:12px;color:var(--muted)">&#127916; Video coming soon</div>';return '<a class="ytb" href="'+e(url)+'" target="_blank"><span style="font-size:20px">&#9654;&#65039;</span><div><div style="font-size:11px;color:var(--red);font-weight:700;letter-spacing:1px;text-transform:uppercase">Watch on YouTube</div><div style="font-size:12px;color:var(--muted);margin-top:2px">'+e(lbl)+'</div></div><span style="margin-left:auto;font-size:16px;color:var(--muted)">&#8599;</span></a>';}
 
+
+var BELTS=[
+  {name:"White Belt",color:"#f0f0f0"},
+  {name:"White/Yellow Belt",color:"#e8e040"},
+  {name:"Yellow Belt",color:"#e8c800"},
+  {name:"Yellow/Green Belt",color:"#a0c840"},
+  {name:"Green Belt",color:"#28a840"},
+  {name:"Green/Blue Belt",color:"#2870c8"},
+  {name:"Blue Belt",color:"#1848a0"},
+  {name:"Blue/Red Belt",color:"#8020a0"},
+  {name:"Red Belt",color:"#e81028"},
+  {name:"Red/Black Belt",color:"#601010"},
+  {name:"Black Belt",color:"#181818"},
+];
+function showBeltPicker(){
+  var existing=document.getElementById('belt-modal');
+  if(existing){existing.remove();return;}
+  var m=document.createElement('div');
+  m.className='belt-modal';m.id='belt-modal';
+  var s=document.createElement('div');
+  s.className='belt-sheet';
+  s.innerHTML='<div style="font-family:inherit;font-size:16px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;text-align:center">Select Your Belt</div>';
+  BELTS.forEach(function(b){
+    var d=document.createElement('div');
+    d.className='belt-opt'+(BELT===b.name?' sel':'');
+    d.innerHTML='<div class="belt-dot" style="background:'+b.color+'"></div><div style="font-size:14px;font-weight:700;color:var(--white)">'+b.name+'</div>';
+    d.onclick=function(){
+      BELT=b.name;
+      localStorage.setItem('tkd-belt',b.name);
+      // Update badge
+      var badge=document.querySelector('.badge');
+      if(badge) badge.textContent=b.name+' ▾';
+      m.remove();
+    };
+    s.appendChild(d);
+  });
+  m.appendChild(s);
+  m.onclick=function(e){if(e.target===m)m.remove();};
+  document.body.appendChild(m);
+}
+
 function getStats(){
   var s=JSON.parse(localStorage.getItem('tkd-sessions')||'[]');
   var now=new Date(),wk=new Date(now-604800000);
@@ -344,8 +391,8 @@ function rHome(){
   h+='</div>';
   h+='<button onclick="logSession()" style="width:100%;background:linear-gradient(135deg,var(--red),#b01230);border:none;color:#fff;font-size:16px;font-weight:900;letter-spacing:2px;padding:14px;border-radius:14px;cursor:pointer;margin-bottom:14px;text-transform:uppercase;touch-action:manipulation">&#129355; LOG TRAINING SESSION</button>';
   h+='<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px">';
-  h+='<div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">General Choi Hong Hi</div>';
-  h+='<div style="font-size:13px;color:var(--text);line-height:1.6;font-style:italic">&ldquo;The more you sweat in training, the less you bleed in battle.&rdquo;</div>';
+  h+='<div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Master Dutton</div>';
+  h+='<div style="font-size:13px;color:var(--text);line-height:1.6;font-style:italic">&ldquo;As long as you look good, the rest doesn\'t matter.&rdquo;</div>';
   h+='</div>';
   h+='<div style="font-size:13px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Focus For Today</div>';
   h+='<div style="background:linear-gradient(135deg,rgba(232,25,60,.08),rgba(232,25,60,.03));border:1px solid rgba(232,25,60,.2);border-radius:14px;padding:14px 16px;">';
@@ -700,6 +747,7 @@ if(localStorage.getItem('tkd-auth')==='1'){
   });
 }
 
+var bb=document.getElementById('belt-badge');if(bb)bb.textContent=BELT+' ▾';
 setTimeout(function(){document.getElementById('spl').classList.add('h');},2000);
 render();
 </script>
