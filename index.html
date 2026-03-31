@@ -71,8 +71,29 @@ body{font-family:"Segoe UI",sans-serif;background:var(--bg);color:var(--text);di
 .glr{display:flex;align-items:center;padding:10px 16px}
 .pd{background:linear-gradient(135deg,var(--card),var(--surface));border:1px solid var(--border);border-radius:16px;padding:16px;margin-top:10px;margin-bottom:12px}
 @media(min-width:430px){body{align-items:center;min-height:100vh}#app{border-radius:44px;max-height:844px;box-shadow:0 40px 120px rgba(0,0,0,.8)}}
+
+.pwd-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px}
+.pwd-logo{font-size:52px;letter-spacing:6px;color:var(--white);font-weight:900;line-height:1;text-align:center;margin-bottom:8px}
+.pwd-logo span{color:var(--red)}
+.pwd-line{width:60px;height:3px;background:var(--red);border-radius:2px;margin:16px auto}
+.pwd-input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--white);font-size:16px;padding:14px 16px;border-radius:12px;outline:none;font-family:inherit;margin-bottom:10px;text-align:center;letter-spacing:2px}
+.pwd-btn{width:100%;background:linear-gradient(135deg,var(--red),#b01230);border:none;color:#fff;font-size:18px;font-weight:900;letter-spacing:2px;padding:14px;border-radius:14px;cursor:pointer;text-transform:uppercase}
+.pwd-err{color:var(--red);font-size:13px;text-align:center;margin-bottom:10px;min-height:20px}
 </style></head><body>
 <div id="app">
+
+<div class="pwd-screen" id="pwd-screen">
+  <div style="font-size:60px;margin-bottom:8px">&#129355;</div>
+  <div class="pwd-logo">TAEKWON<span>-DO</span></div>
+  <div style="font-size:16px;letter-spacing:2px;color:var(--gold);font-weight:700;margin-top:4px">MASTER DUTTON</div>
+  <div class="pwd-line"></div>
+  <div style="font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:24px">Members Only</div>
+  <input class="pwd-input" id="pwd-input" type="password" placeholder="Enter access code" />
+  <div class="pwd-err" id="pwd-err"></div>
+  <button class="pwd-btn" onclick="checkPwd()">ENTER</button>
+  <div style="font-size:11px;color:var(--muted);margin-top:20px;text-align:center;line-height:1.6">Access code provided by your instructor.<br/>Contact Master Dutton to subscribe.</div>
+</div>
+
 <div class="spl" id="spl"><div style="font-size:60px;margin-bottom:8px">&#129355;</div><div class="sll">TAEKWON<span>-DO</span></div><div class="slln"></div><div style="font-size:22px;letter-spacing:2px;color:var(--gold);margin-top:4px;font-weight:700">MASTER DUTTON</div><div style="font-size:13px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:8px">ITF &middot; Scotland</div><div style="position:absolute;bottom:60px;font-size:11px;color:var(--muted);letter-spacing:2px">LOADING...</div></div>
 <div class="sbar"><span id="clock"></span><span id="datebar"></span></div>
 <div class="hdr"><div class="logo">TAEKWON<span>-DO</span></div><div class="badge">Red Belt</div></div>
@@ -607,6 +628,33 @@ function aQ(i){
   QH.push({q:q.q,c:ok,ans:q.o[q.a]});
   render();
   setTimeout(function(){if(QA>=20){QF=true;render();}else{QI++;QS=null;render();}},1200);
+}
+
+
+var PWD = "itftkdelite2026";
+function checkPwd(){
+  var val = document.getElementById('pwd-input').value;
+  var err = document.getElementById('pwd-err');
+  if(val === PWD){
+    document.getElementById('pwd-screen').style.display='none';
+    localStorage.setItem('tkd-auth','1');
+  } else {
+    err.textContent = 'Incorrect access code. Please try again.';
+    document.getElementById('pwd-input').value='';
+  }
+}
+// Allow Enter key
+document.addEventListener('keydown', function(e){
+  if(e.key==='Enter' && document.getElementById('pwd-screen').style.display!=='none'){
+    checkPwd();
+  }
+});
+// Check if already authenticated
+if(localStorage.getItem('tkd-auth')==='1'){
+  document.addEventListener('DOMContentLoaded', function(){
+    var ps = document.getElementById('pwd-screen');
+    if(ps) ps.style.display='none';
+  });
 }
 
 setTimeout(function(){document.getElementById('spl').classList.add('h');},2000);
