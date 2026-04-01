@@ -309,17 +309,25 @@ function yt(url,lbl){if(!url)return '<div style="background:var(--card);border:1
 
 
 var BELTS=[
-  {name:"White Belt",color:"#f0f0f0"},
-  {name:"White/Yellow Belt",color:"#e8e040"},
-  {name:"Yellow Belt",color:"#e8c800"},
-  {name:"Yellow/Green Belt",color:"#a0c840"},
-  {name:"Green Belt",color:"#28a840"},
-  {name:"Green/Blue Belt",color:"#2870c8"},
-  {name:"Blue Belt",color:"#1848a0"},
-  {name:"Blue/Red Belt",color:"#8020a0"},
-  {name:"Red Belt",color:"#e81028"},
-  {name:"Red/Black Belt",color:"#601010"},
-  {name:"Black Belt",color:"#181818"},
+  {name:"White Belt",color:"#f0f0f0",title:""},
+  {name:"White Belt - Yellow Stripe",color:"#f0f0f0",stripe:"#e8c800",title:""},
+  {name:"Yellow Belt",color:"#e8c800",title:""},
+  {name:"Yellow Belt - Green Stripe",color:"#e8c800",stripe:"#28a840",title:""},
+  {name:"Green Belt",color:"#28a840",title:""},
+  {name:"Green Belt - Blue Stripe",color:"#28a840",stripe:"#1848a0",title:""},
+  {name:"Blue Belt",color:"#1848a0",title:""},
+  {name:"Blue Belt - Red Stripe",color:"#1848a0",stripe:"#e81028",title:""},
+  {name:"Red Belt",color:"#e81028",title:""},
+  {name:"Red Belt - Black Stripe",color:"#e81028",stripe:"#181818",title:""},
+  {name:"1st Dan - Boo Sabum",color:"#181818",title:"Boo Sabum (Assistant Instructor)"},
+  {name:"2nd Dan - Boo Sabum",color:"#181818",title:"Boo Sabum (Assistant Instructor)"},
+  {name:"3rd Dan - Boo Sabum",color:"#181818",title:"Boo Sabum (Assistant Instructor)"},
+  {name:"4th Dan - Sabum",color:"#181818",title:"Sabum (Instructor)"},
+  {name:"5th Dan - Sabum",color:"#181818",title:"Sabum (Instructor)"},
+  {name:"6th Dan - Sabum",color:"#181818",title:"Sabum (Instructor)"},
+  {name:"7th Dan - Sahyun",color:"#181818",title:"Sahyun (Master)"},
+  {name:"8th Dan - Sahyun",color:"#181818",title:"Sahyun (Master)"},
+  {name:"9th Dan - Saseong",color:"#181818",title:"Saseong (Grand Master)"},
 ];
 function showBeltPicker(){
   var existing=document.getElementById('belt-modal');
@@ -332,7 +340,10 @@ function showBeltPicker(){
   BELTS.forEach(function(b){
     var d=document.createElement('div');
     d.className='belt-opt'+(BELT===b.name?' sel':'');
-    d.innerHTML='<div class="belt-dot" style="background:'+b.color+'"></div><div style="font-size:14px;font-weight:700;color:var(--white)">'+b.name+'</div>';
+    var dotStyle='background:'+b.color+';';
+    if(b.stripe) dotStyle+='border-right:8px solid '+b.stripe+';';
+    var sub=b.title?'<div style="font-size:11px;color:var(--muted);margin-top:2px">'+b.title+'</div>':'';
+    d.innerHTML='<div class="belt-dot" style="'+dotStyle+'"></div><div><div style="font-size:14px;font-weight:700;color:var(--white)">'+b.name+'</div>'+sub+'</div>';
     d.onclick=function(){
       BELT=b.name;
       localStorage.setItem('tkd-belt',b.name);
