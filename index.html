@@ -376,9 +376,32 @@ function showBeltPicker(){
     } else {
       bgStyle='background:'+b.color;
     }
-    d.style.cssText=bgStyle+';border-radius:10px;padding:12px 16px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;border:2px solid '+(isSelected?'#fff':'transparent')+';';
-    var sub=b.title?'<div style="font-size:11px;opacity:0.8;margin-top:2px">'+b.title+'</div>':'';
-    d.innerHTML='<div style="flex:1"><div style="font-size:14px;font-weight:700;color:'+textCol+'">'+b.name+'</div>'+sub+'</div>'+(isSelected?'<span style="color:'+textCol+'">&#10003;</span>':'');
+    d.style.cssText='background:var(--card);border-radius:12px;padding:10px 14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:14px;border:2px solid '+(isSelected?'rgba(255,255,255,.6)':'transparent')+';';
+    
+    // Draw realistic belt
+    var beltHtml;
+    if(b.name.indexOf('Dan')>=0 || b.name==="Black Belt"){
+      // Black belt with gold bar(s)
+      var dan=parseInt(b.name)||1;
+      var bars='';
+      for(var dd=0;dd<Math.min(dan,9);dd++){
+        bars+='<div style="width:6px;height:100%;background:#c9a84c;margin-right:3px;border-radius:1px"></div>';
+      }
+      beltHtml='<div style="width:80px;height:20px;border-radius:4px;background:#181818;flex-shrink:0;display:flex;align-items:center;padding:0 6px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">'+bars+'</div>';
+    } else if(b.stripe){
+      // Belt with centre stripe
+      beltHtml='<div style="width:80px;height:20px;border-radius:4px;flex-shrink:0;background:'+b.color+';display:flex;flex-direction:column;justify-content:center;align-items:stretch;overflow:hidden;border:1px solid rgba(255,255,255,.1)">'
+        +'<div style="height:5px;background:'+b.color+'"></div>'
+        +'<div style="height:6px;background:'+b.stripe+'"></div>'
+        +'<div style="height:5px;background:'+b.color+'"></div>'
+        +'</div>';
+    } else {
+      // Solid belt
+      beltHtml='<div style="width:80px;height:20px;border-radius:4px;flex-shrink:0;background:'+b.color+';border:1px solid rgba(255,255,255,.1)"></div>';
+    }
+    
+    var sub=b.title?'<div style="font-size:11px;color:var(--muted);margin-top:2px">'+b.title+'</div>':'';
+    d.innerHTML=beltHtml+'<div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--white)">'+b.name+'</div>'+sub+'</div>'+(isSelected?'<span style="color:var(--green);font-size:18px">&#10003;</span>':'');
     d.onclick=function(){
       BELT=b.name;
       localStorage.setItem('tkd-belt',b.name);
