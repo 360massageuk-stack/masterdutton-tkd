@@ -296,11 +296,20 @@ var BLOCKS=[
 {name:"Twin Forearm Block",k:"Sang Palmok Makgi",desc:"Uses both forearms simultaneously."}
 ];
 var STANCES=[
-{name:"Parallel Stance",k:"Narani Sogi",desc:"Feet shoulder width apart, toes forward."},
-{name:"Walking Stance",k:"Gunnun Sogi",desc:"One foot forward, weight evenly distributed."},
-{name:"L-Stance",k:"Niunja Sogi",desc:"Weight on rear foot, front foot points forward."},
-{name:"Sitting Stance",k:"Annun Sogi",desc:"Wide stance, knees bent outward."},
-{name:"Fixed Stance",k:"Gojung Sogi",desc:"Similar to walking stance but more rooted."}
+{name:"Parallel Ready Stance",k:"Narani Junbi Sogi",desc:"Feet shoulder width apart, toes forward. The most common ready stance."},
+{name:"Closed Ready Stance",k:"Moa Junbi Sogi",desc:"Feet together, hands clasped in front. Several variations A, B, C, D."},
+{name:"Walking Stance",k:"Gunnun Sogi",desc:"One foot forward, shoulder width apart. Weight 50/50. Most common attacking stance."},
+{name:"L-Stance",k:"Niunja Sogi",desc:"70% weight on rear foot, 30% on front. Front foot forward, rear foot at 90 degrees. Primary defensive stance."},
+{name:"Sitting Stance",k:"Annun Sogi",desc:"Feet two shoulder widths apart, toes forward, knees bent outward. Used for side attacks."},
+{name:"Fixed Stance",k:"Gojung Sogi",desc:"Similar to walking stance but rear foot is fixed flat. More rooted and powerful."},
+{name:"Low Stance",k:"Nachuo Sogi",desc:"Similar to walking stance but much lower. Used for low attacks and to avoid high attacks."},
+{name:"X-Stance",k:"Kyocha Sogi",desc:"One foot crossed behind the other. Used for jumping techniques and fast directional changes."},
+{name:"One-Leg Stance",k:"Waebal Sogi",desc:"Balancing on one leg, other foot raised. Used for kicking chambers and balance training."},
+{name:"Rear Foot Stance",k:"Dwit Bal Sogi",desc:"90% weight on rear foot. Front foot lightly touches ground. Used for quick kicks."},
+{name:"Diagonal Stance",k:"Sasun Sogi",desc:"Feet at 45 degree angle. Used in specific patterns for angled attacks."},
+{name:"Bending Ready Stance",k:"Goburyo Junbi Sogi",desc:"One knee raised with hands in guard. Ready to deliver a side kick. Variations A and B."},
+{name:"Vertical Stance",k:"Soojik Sogi",desc:"Feet together in a straight line front to back. Very narrow stance."},
+{name:"Warrior Ready Stance",k:"Soo Sogi",desc:"Similar to parallel stance with specific hand position. Used in higher Dan patterns."}
 ];
 
 function e(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -630,7 +639,8 @@ function rComp(){
     "Gum shield recommended",
     "All equipment must be ITF approved"
   ])
-  +'<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;font-size:12px;color:var(--muted);line-height:1.6;font-style:italic">For full and current ITF competition rules always refer to your official ITF organisation documentation. Rules are updated periodically.</div>';
+  +'<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;font-size:12px;color:var(--muted);line-height:1.6;font-style:italic">For full and current ITF competition rules always refer to your official ITF organisation documentation. Rules are updated periodically.</div>'
+  +'<button onclick="document.getElementById(\'content\').scrollTop=0" style="width:100%;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:13px;font-weight:700;padding:12px;border-radius:12px;cursor:pointer;margin-bottom:10px">&#8679; Back to Top</button>';
 }
 
 function rCompSection(title,items){
@@ -696,6 +706,7 @@ if(window.speechSynthesis){
 
 function render(){
   var c=document.getElementById('content');
+  c.scrollTop=0;
   if(CT==='home')c.innerHTML=rHome();
   else if(CT==='patterns')c.innerHTML=rPats();
   else if(CT==='techniques')c.innerHTML=rTech();
