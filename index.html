@@ -96,7 +96,10 @@ body{font-family:"Segoe UI",sans-serif;background:var(--bg);color:var(--text);di
   <div style="font-size:16px;letter-spacing:2px;color:var(--gold);font-weight:700;margin-top:4px">MASTER DUTTON</div>
   <div class="pwd-line"></div>
   <div style="font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:24px">Members Only</div>
-  <input class="pwd-input" id="pwd-input" type="password" placeholder="Enter access code" />
+  <div style="position:relative;width:100%;margin-bottom:0">
+  <input class="pwd-input" id="pwd-input" type="password" placeholder="Enter access code" style="padding-right:48px;margin-bottom:0"/>
+  <button onclick="var i=document.getElementById('pwd-input');var b=document.getElementById('pwd-eye');if(i.type==='password'){i.type='text';b.textContent='&#128064;';}else{i.type='password';b.textContent='&#128065;';};" id="pwd-eye" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);padding:4px;">&#128065;</button>
+</div>
   <div class="pwd-err" id="pwd-err"></div>
   <button class="pwd-btn" onclick="checkPwd()">ENTER</button>
   <div style="font-size:11px;color:var(--muted);margin-top:20px;text-align:center;line-height:1.6">Access code provided by your instructor.<br/>Contact Master Dutton to subscribe.</div>
@@ -360,14 +363,22 @@ function showBeltPicker(){
   m.className='belt-modal';m.id='belt-modal';
   var s=document.createElement('div');
   s.className='belt-sheet';
+  s.style.cssText='overflow-y:auto;max-height:85vh;';
   s.innerHTML='<div style="font-family:inherit;font-size:16px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;text-align:center">Select Your Belt</div>';
   BELTS.forEach(function(b){
     var d=document.createElement('div');
-    d.className='belt-opt'+(BELT===b.name?' sel':'');
-    var dotStyle='background:'+b.color+';';
-    if(b.stripe) dotStyle+='border-right:8px solid '+b.stripe+';';
-    var sub=b.title?'<div style="font-size:11px;color:var(--muted);margin-top:2px">'+b.title+'</div>':'';
-    d.innerHTML='<div class="belt-dot" style="'+dotStyle+'"></div><div><div style="font-size:14px;font-weight:700;color:var(--white)">'+b.name+'</div>'+sub+'</div>';
+    // Make whole row the belt colour
+    var isSelected=BELT===b.name;
+    var textCol=b.color==='#f0f0f0'?'#111':'#fff';
+    var bgStyle;
+    if(b.stripe){
+      bgStyle='background:linear-gradient(90deg,'+b.color+' 70%,'+b.stripe+' 70%)';
+    } else {
+      bgStyle='background:'+b.color;
+    }
+    d.style.cssText=bgStyle+';border-radius:10px;padding:12px 16px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;border:2px solid '+(isSelected?'#fff':'transparent')+';';
+    var sub=b.title?'<div style="font-size:11px;opacity:0.8;margin-top:2px">'+b.title+'</div>':'';
+    d.innerHTML='<div style="flex:1"><div style="font-size:14px;font-weight:700;color:'+textCol+'">'+b.name+'</div>'+sub+'</div>'+(isSelected?'<span style="color:'+textCol+'">&#10003;</span>':'');
     d.onclick=function(){
       BELT=b.name;
       localStorage.setItem('tkd-belt',b.name);
