@@ -118,6 +118,7 @@ body{font-family:"Segoe UI",sans-serif;background:var(--bg);color:var(--text);di
 <button class="tb" onclick="sT('quiz')" id="t-quiz"><span class="ic">&#129504;</span><span class="lb">Quiz</span></button>
 <button class="tb" onclick="sT('competition')" id="t-competition"><span class="ic">&#127941;</span><span class="lb">Compete</span></button>
 <button class="tb" onclick="sT('glossary')" id="t-glossary"><span class="ic">&#127472;&#127479;</span><span class="lb">Korean</span></button>
+<button class="tb" onclick="sT('ask')" id="t-ask"><span class="ic">&#129351;</span><span class="lb">Ask</span></button>
 </div></div>
 
 <script>
@@ -775,6 +776,62 @@ function rGloss(){
   });
   return h;
 }
+
+function rAsk(){
+  var waBase='https://wa.me/447407030077?text=';
+  var msgs=[
+    {label:"Pattern Question",icon:"&#129355;",text:"Hi Master Dutton, I have a question about a pattern: "},
+    {label:"Technique Help",icon:"&#9889;",text:"Hi Master Dutton, I need help with my technique: "},
+    {label:"Grading Question",icon:"&#127919;",text:"Hi Master Dutton, I have a question about grading: "},
+    {label:"Korean / Theory",icon:"&#127472;&#127479;",text:"Hi Master Dutton, I have a theory question: "},
+    {label:"General Question",icon:"&#128172;",text:"Hi Master Dutton, I have a question: "},
+  ];
+  var h='';
+  h+='<div style="text-align:center;padding:20px 0 16px">';
+  h+='<div style="font-size:48px;margin-bottom:8px">&#129355;</div>';
+  h+='<div style="font-family:inherit;font-size:24px;font-weight:900;color:var(--white);letter-spacing:2px;text-transform:uppercase">Ask Master Dutton</div>';
+  h+='<div style="font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5">Direct access to your instructor.<br/>Tap a question type to open WhatsApp.</div>';
+  h+='</div>';
+
+  // Profile card
+  h+='<div style="background:linear-gradient(135deg,rgba(232,25,60,.08),rgba(232,25,60,.03));border:1px solid rgba(232,25,60,.2);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;align-items:center;gap:14px">';
+  h+='<div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--red),#b01230);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">&#129355;</div>';
+  h+='<div><div style="font-size:16px;font-weight:900;color:var(--white)">Master Dutton</div>';
+  h+='<div style="font-size:12px;color:var(--gold);margin-top:2px">ITF Taekwon-Do Instructor</div>';
+  h+='<div style="font-size:11px;color:var(--muted);margin-top:4px">&#128994; Usually replies within 24 hours</div>';
+  h+='</div></div>';
+
+  // Available hours
+  h+='<div class="card" style="margin-bottom:16px">';
+  h+='<div style="font-size:11px;color:var(--red);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">&#128337; Response Times</div>';
+  h+='<div style="font-size:13px;color:var(--text);line-height:1.9">';
+  h+='<div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px"><span style="color:var(--muted)">Mon - Fri</span><span>Within 24 hours</span></div>';
+  h+='<div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px"><span style="color:var(--muted)">Weekends</span><span>Training days - check schedule</span></div>';
+  h+='<div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Urgent</span><span>Contact during class hours</span></div>';
+  h+='</div></div>';
+
+  // Question type buttons
+  h+='<div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Choose your question type:</div>';
+  msgs.forEach(function(m){
+    var url=waBase+encodeURIComponent(m.text);
+    h+='<a href="'+url+'" target="_blank" style="display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px;text-decoration:none;cursor:pointer">';
+    h+='<div style="width:44px;height:44px;border-radius:12px;background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">'+m.icon+'</div>';
+    h+='<div style="flex:1"><div style="font-size:15px;font-weight:700;color:var(--white)">'+m.label+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Opens WhatsApp</div></div>';
+    h+='<span style="font-size:20px">&#128373;</span>';
+    h+='</a>';
+  });
+
+  // WhatsApp direct
+  h+='<a href="https://wa.me/447407030077" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#25d366,#128c7e);border:none;border-radius:14px;padding:14px;margin-top:4px;text-decoration:none">';
+  h+='<span style="font-size:20px">&#128373;</span>';
+  h+='<span style="font-size:16px;font-weight:900;color:#fff;letter-spacing:1px">OPEN WHATSAPP</span>';
+  h+='</a>';
+
+  h+='<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.6">This feature is exclusive to app members.<br/>Your question goes directly to Master Dutton.</div>';
+
+  return h;
+}
+
 function sGS(v){GS=v;render();}
 function clrG(){GS='';render();}
 function sGO(c){GO=GO===c?null:c;render();}
@@ -933,6 +990,7 @@ function render(){
   else if(CT==='quiz')c.innerHTML=rQuiz();
   else if(CT==='glossary')c.innerHTML=rGloss();
   else if(CT==='competition')c.innerHTML=rComp();
+  else if(CT==='ask')c.innerHTML=rAsk();
   if(GS&&CT==='glossary'){setTimeout(function(){var el=document.getElementById('gls');if(el){el.focus();el.selectionStart=el.selectionEnd=el.value.length;}},10);}
 }
 function sT(t){CT=t;SP=null;MV=false;document.querySelectorAll('.tb').forEach(function(b){b.classList.remove('a');});var el=document.getElementById('t-'+t);if(el)el.classList.add('a');render();}
