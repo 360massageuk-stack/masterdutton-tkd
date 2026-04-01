@@ -381,13 +381,12 @@ function showBeltPicker(){
     // Draw realistic belt
     var beltHtml;
     if(b.name.indexOf('Dan')>=0 || b.name==="Black Belt"){
-      // Black belt with gold bar(s)
+      var romans=['','I','II','III','IV','V','VI','VII','VIII','IX'];
       var dan=parseInt(b.name)||1;
-      var bars='';
-      for(var dd=0;dd<Math.min(dan,9);dd++){
-        bars+='<div style="width:6px;height:100%;background:#c9a84c;margin-right:3px;border-radius:1px"></div>';
-      }
-      beltHtml='<div style="width:80px;height:20px;border-radius:4px;background:#181818;flex-shrink:0;display:flex;align-items:center;padding:0 6px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">'+bars+'</div>';
+      var numeral=romans[Math.min(dan,9)];
+      beltHtml='<div style="width:80px;height:20px;border-radius:4px;background:#181818;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid rgba(255,255,255,.1)">'
+        +'<span style="color:#c9a84c;font-size:11px;font-weight:900;letter-spacing:1px">'+numeral+'</span>'
+        +'</div>';
     } else if(b.stripe){
       // Belt with centre stripe
       beltHtml='<div style="width:80px;height:20px;border-radius:4px;flex-shrink:0;background:'+b.color+';display:flex;flex-direction:column;justify-content:center;align-items:stretch;overflow:hidden;border:1px solid rgba(255,255,255,.1)">'
