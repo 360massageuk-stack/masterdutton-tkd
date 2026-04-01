@@ -419,6 +419,62 @@ function showBeltPicker(){
   document.body.appendChild(m);
 }
 
+var MD_QUOTES=[
+  "You showed up. That\'s already suspicious behaviour.",
+  "We\'re not chasing perfection\u2026 just less excuses.",
+  "If it feels hard\u2026 good. That means it\'s working.",
+  "Slow is fine. Stopping is not.",
+  "You don\'t need to be great\u2026 just don\'t quit.",
+  "One step at a time. No drama.",
+  "You\'re doing better than the version of you on the couch.",
+  "This isn\'t punishment\u2026 it just feels like it.",
+  "Breathe\u2026 move\u2026 repeat. That\'s the plan.",
+  "You\'ve survived worse. Probably.",
+  "Don\'t overthink it\u2026 just move.",
+  "Even a bad workout counts. Remember that.",
+  "You\'ve done this before\u2026 stop acting new.",
+  "If it\'s easy, you\'re cheating.",
+  "You said you wanted this\u2026 remember?",
+  "Push now\u2026 thank yourself later.",
+  "This is where most people quit. Don\'t.",
+  "You\'re stronger than your excuses. Barely\u2026 but still.",
+  "Stop negotiating. Just get on with it.",
+  "You\'re not tired\u2026 you\'re uncomfortable. Big difference.",
+  "One more rep. Then prove it again.",
+  "You\'re too far in to start slacking now.",
+  "If you can talk\u2026 you can go harder.",
+  "Average effort = average results. Choose better.",
+  "This is where it hurts. Stay here.",
+  "No shortcuts. No sympathy. Just work.",
+  "Your legs are shaking? Good. Carry on.",
+  "Pain is temporary. Weakness is embarrassing.",
+  "If you stop now\u2026 it was all for nothing.",
+  "You wanted a challenge\u2026 here it is.",
+  "Go again. You\'re not done. Not even close.",
+  "Break the limit\u2026 then ignore the new one.",
+  "If you\'re still standing\u2026 you\'ve got more.",
+  "This is the part that changes you. Don\'t waste it.",
+  "Empty the tank. Then find more.",
+  "You don\'t need motivation now\u2026 just guts.",
+  "There is only one height\u2026 head height.",
+  "Stretching begins at 180 degrees.",
+  "Rules\u2026 what rules?",
+  "If in doubt\u2026 kick higher.",
+  "I don\'t sweat\u2026 I leak greatness.",
+  "If found on the floor\u2026 I gave everything.",
+  "Confidence first. Skill catches up later.",
+  "Be the problem people complain about.",
+  "Fall down. Get up. Pretend it didn\'t happen.",
+  "If it looks ridiculous but works\u2026 it still looks ridiculous.",
+  "I came. I saw. I nearly passed out.",
+  "If you\'ve got it\u2026 flaunt it\u2026 then kick someone.",
+  "As long as you look good, the rest doesn\'t matter."
+];
+function getMDQuote(){
+  var idx=Math.floor(Math.random()*MD_QUOTES.length);
+  return MD_QUOTES[idx];
+}
+
 function getStats(){
   var s=JSON.parse(localStorage.getItem('tkd-sessions')||'[]');
   var now=new Date(),wk=new Date(now-604800000);
@@ -462,8 +518,8 @@ function rHome(){
   h+='</div>';
   h+='<button onclick="logSession()" style="width:100%;background:linear-gradient(135deg,var(--red),#b01230);border:none;color:#fff;font-size:16px;font-weight:900;letter-spacing:2px;padding:14px;border-radius:14px;cursor:pointer;margin-bottom:14px;text-transform:uppercase;touch-action:manipulation">&#129355; LOG TRAINING SESSION</button>';
   h+='<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px">';
-  h+='<div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Master Dutton</div>';
-  h+='<div style="font-size:13px;color:var(--text);line-height:1.6;font-style:italic">&ldquo;As long as you look good, the rest doesn\'t matter.&rdquo;</div>';
+  h+='<div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">&#129355; Master Dutton Says...</div>';
+  h+='<div style="font-size:13px;color:var(--text);line-height:1.6;font-style:italic">&ldquo;'+getMDQuote()+'&rdquo;</div>';
   h+='</div>';
   h+='<div style="font-size:13px;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Focus For Today</div>';
   h+='<div style="background:linear-gradient(135deg,rgba(232,25,60,.08),rgba(232,25,60,.03));border:1px solid rgba(232,25,60,.2);border-radius:14px;padding:14px 16px;">';
