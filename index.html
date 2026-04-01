@@ -468,7 +468,7 @@ function rTech(){
 
 function rBelt(){
   var g=BREQS[BI];
-  var cc={PATTERNS:'#e8193c',BASICS:'#3b82f6',SPARRING:'#f97316','POWER TEST':'#c9a84c','SELF-DEFENCE':'#a855f7',THEORY:'#2ea84a'};
+  var catColors={PATTERNS:'#e8193c',BASICS:'#3b82f6',SPARRING:'#f97316','POWER TEST':'#c9a84c','SELF-DEFENCE':'#a855f7',THEORY:'#2ea84a'};
   var grps={};
   g.reqs.forEach(function(req,i){
     var m=req.match(/^([A-Z][A-Z\s\-]*):/);
@@ -476,19 +476,112 @@ function rBelt(){
     if(!grps[cat])grps[cat]=[];
     grps[cat].push({req:req,i:i});
   });
-  var h=h1('BELT REQUIREMENTS')+'<div class="bsc">'+BREQS.map(function(gr,i){return '<div class="bc'+(BI===i?' a':'')+'" onclick="sBI('+i+')">'+e(gr.from)+'</div>';}).join('')+'</div>';
-  h+='<div class="card" style="margin-bottom:10px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div><div style="font-size:20px;font-weight:900;color:var(--white)">'+e(g.from.toUpperCase())+' &#8594; '+e(g.to.toUpperCase())+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+e(g.grade)+'</div></div><button onclick="rBI()" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:4px 10px;border-radius:8px;cursor:pointer">Reset</button></div><div style="font-size:12px;color:var(--gold);line-height:1.5;font-style:italic;padding-top:10px;border-top:1px solid var(--border)">&#129355; '+e(g.meaning)+'</div></div>';
+
+  // Student profile from localStorage
+  var profile=JSON.parse(localStorage.getItem('tkd-profile')||'{}');
+  var studentName=profile.name||'';
+  var gradingDate=profile.gradingDate||'';
+  var notes=profile.notes||'';
+
+  // Grading countdown
+  var countdown='';
+  if(gradingDate){
+    var gd=new Date(gradingDate);
+    var now=new Date();
+    var days=Math.ceil((gd-now)/(1000*60*60*24));
+    if(days>0) countdown='<div style="background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.3);border-radius:14px;padding:14px 16px;margin-bottom:12px;text-align:center">'
+      +'<div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Next Grading</div>'
+      +'<div style="font-size:42px;font-weight:900;color:var(--gold);line-height:1">'+days+'</div>'
+      +'<div style="font-size:12px;color:var(--muted);margin-top:4px">days to go &middot; '+gd.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+'</div>'
+      +'</div>';
+    else if(days===0) countdown='<div style="background:rgba(232,25,60,.1);border:1px solid rgba(232,25,60,.3);border-radius:14px;padding:14px 16px;margin-bottom:12px;text-align:center"><div style="font-size:16px;font-weight:900;color:var(--red)">&#129355; GRADING DAY TODAY! Good luck!</div></div>';
+    else countdown='<div style="background:rgba(46,168,74,.1);border:1px solid rgba(46,168,74,.3);border-radius:14px;padding:14px 16px;margin-bottom:12px;text-align:center"><div style="font-size:14px;font-weight:700;color:var(--green)">&#10003; Grading completed!</div></div>';
+  }
+
+  var h='<div class="stitle">BELT GRADING</div>';
+
+  // Student profile card
+  h+='<div class="card" style="margin-bottom:12px">';
+  h+='<div style="font-size:11px;color:var(--red);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">&#128100; My Profile</div>';
+  h+='<div style="margin-bottom:10px">';
+  h+='<div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Your Name</div>';
+  h+='<input id="st-name" value="'+e(studentName)+'" placeholder="Enter your name" oninput="saveProfile()" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--white);font-size:14px;padding:10px 12px;border-radius:10px;outline:none;font-family:inherit"/>';
+  h+='</div>';
+  h+='<div style="margin-bottom:10px">';
+  h+='<div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Next Grading Date</div>';
+  h+='<input id="st-date" type="date" value="'+e(gradingDate)+'" oninput="saveProfile()" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--white);font-size:14px;padding:10px 12px;border-radius:10px;outline:none;font-family:inherit"/>';
+  h+='</div>';
+  h+='<div>';
+  h+='<div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Personal Notes</div>';
+  h+='<textarea id="st-notes" placeholder="Add your own training notes..." oninput="saveProfile()" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--white);font-size:13px;padding:10px 12px;border-radius:10px;outline:none;font-family:inherit;resize:none;height:70px">'+e(notes)+'</textarea>';
+  h+='</div>';
+  h+='</div>';
+
+  // Countdown
+  h+=countdown;
+
+  // Belt selector scroll
+  h+='<div class="stitle" style="font-size:18px;margin-bottom:8px">GRADING REQUIREMENTS</div>';
+  h+='<div class="bsc">'+BREQS.map(function(gr,i){return '<div class="bc'+(BI===i?' a':'')+'" onclick="sBI('+i+')">'+e(gr.from)+'</div>';}).join('')+'</div>';
+
+  // Current grade card
+  h+='<div class="card" style="margin-bottom:10px">';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
+  h+='<div><div style="font-size:20px;font-weight:900;color:var(--white)">'+e(g.from.toUpperCase())+' &#8594; '+e(g.to.toUpperCase())+'</div></div>';
+  h+='<button onclick="rBI()" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:4px 10px;border-radius:8px;cursor:pointer">Reset</button>';
+  h+='</div>';
+  h+='<div style="font-size:12px;color:var(--gold);line-height:1.5;font-style:italic;padding-top:10px;border-top:1px solid var(--border)">&#129355; '+e(g.meaning)+'</div>';
+  h+='</div>';
+
+  // Requirements
   Object.keys(grps).forEach(function(cat){
-    var col=cc[cat]||'var(--muted)';
-    h+='<div class="card" style="margin-bottom:10px;padding:14px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:'+col+';margin-bottom:10px;display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:'+col+';display:inline-block;flex-shrink:0"></span>'+cat+'</div>';
+    var col=catColors[cat]||'var(--muted)';
+    h+='<div class="card" style="margin-bottom:10px;padding:14px 16px">';
+    h+='<div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:'+col+';margin-bottom:10px;display:flex;align-items:center;gap:6px">';
+    h+='<span style="width:8px;height:8px;border-radius:50%;background:'+col+';display:inline-block;flex-shrink:0"></span>'+cat+'</div>';
     grps[cat].forEach(function(item){
       var done=!!BC[BI+'_'+item.i];
       var clean=item.req.replace(/^[A-Z][A-Z\s\-]*:\s*/,'');
-      h+='<div class="rr" onclick="tReq('+item.i+')"><span class="rc" style="color:'+(done?'var(--green)':'var(--border)')+'">'+( done?'&#10003;':'&#9675;')+'</span><div class="rt'+(done?' dn':'')+'">'+e(clean)+'</div></div>';
+      h+='<div class="rr" onclick="tReq('+item.i+')">';
+      h+='<span class="rc" style="color:'+(done?'var(--green)':'var(--border)')+'">'+( done?'&#10003;':'&#9675;')+'</span>';
+      h+='<div class="rt'+(done?' dn':'')+'">'+e(clean)+'</div>';
+      h+='</div>';
     });
     h+='</div>';
   });
+
+  // Grading tips
+  h+='<div class="card" style="margin-bottom:10px">';
+  h+='<div style="font-size:11px;color:var(--red);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">&#128161; Grading Tips from Master Dutton</div>';
+  h+='<div style="font-size:13px;color:var(--text);line-height:1.7">';
+  h+='<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">&#9642; Arrive early, dobok clean and pressed</div>';
+  h+='<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">&#9642; Bow when entering and leaving the mat</div>';
+  h+='<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">&#9642; Project your kihap with confidence</div>';
+  h+='<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">&#9642; Quality over speed — examiners want to see technique</div>';
+  h+='<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">&#9642; If you make a mistake, carry on — stopping is worse</div>';
+  h+='<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)">&#9642; Know your theory — you will be asked questions</div>';
+  h+='<div>&#9642; Remember — you wouldn\'t be grading if I didn\'t think you were ready</div>';
+  h+='</div></div>';
+
   return h;
+}
+
+function saveProfile(){
+  var name=document.getElementById('st-name');
+  var date=document.getElementById('st-date');
+  var notes=document.getElementById('st-notes');
+  var profile={};
+  if(name) profile.name=name.value;
+  if(date) profile.gradingDate=date.value;
+  if(notes) profile.notes=notes.value;
+  localStorage.setItem('tkd-profile',JSON.stringify(profile));
+  // Update countdown without full re-render
+  var gd=date&&date.value?new Date(date.value):null;
+  if(gd){
+    var days=Math.ceil((gd-new Date())/(1000*60*60*24));
+    var cd=document.getElementById('countdown-days');
+    if(cd) cd.textContent=days;
+  }
 }
 
 function rQuiz(){
@@ -563,7 +656,8 @@ function sGO(c){GO=GO===c?null:c;render();}
 
 
 function rComp(){
-  return '<div class="stitle">COMPETITION RULES</div>'
+  return '<button class="bk" onclick="sT(\'home\')">&#8592; Home</button>'
+  +'<div class="stitle">COMPETITION RULES</div>'
   +'<div style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--gold);line-height:1.6">&#9888;&#65039; These rules are based on original ITF guidelines. Rules may vary between organisations and events. Always confirm with your competition organisers before competing.</div>'
   +rCompSection("&#129354; AREA & FORMAT",[
     "Competition area: 9m x 9m matted surface",
