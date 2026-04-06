@@ -606,11 +606,32 @@ function rTech(){
   var vis=(TC==='kicks'&&TL!=='All')?items.filter(function(k){return k.lv===TL;}):items;
   var h=h1('TECHNIQUES')+'<div class="pills">'+cats.map(function(c){return '<span class="pill'+(TC===c[0]?' a':'')+'" onclick="sTC(\''+c[0]+'\')">'+c[1]+'</span>';}).join('')+'</div>';
   if(lvls) h+='<div class="pills">'+lvls.map(function(l){return '<span class="pill'+(TL===l?' a':'')+'" onclick="sTL(\''+l+'\')">'+l+'</span>';}).join('')+'</div>';
-  vis.forEach(function(item,i){
-    h+='<div class="card" style="cursor:pointer" onclick="tTO('+i+')"><div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:15px;font-weight:700;color:var(--white)">'+e(item.name)+'</div><div style="font-size:12px;color:var(--gold);margin-top:2px">'+e(item.k)+'</div></div><span style="color:var(--muted);font-size:16px">'+(TO===i?'&#9662;':'&#9656;')+'</span></div>'+(TO===i?'<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:13px;color:var(--text);line-height:1.5">'+e(item.desc)+(item.tgt?'<div style="font-size:12px;color:var(--muted);margin-top:6px">Target: '+e(item.tgt)+'</div>':'')+'</div>':'')+'</div>';
-  });
-  return h;
-}
+  
+vis.forEach(function(item,i){
+    var isOpen = TO === i;
+
+    var svgDiagram = '';
+    if(TC === 'stances' && isOpen && STANCE_SVGS[item.name]){
+        svgDiagram = '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:12px;display:flex;align-items:center;gap:12px"><div style="width:110px;flex-shrink:0">'+STANCE_SVGS[item.name]+'</div><div><div style="font-size:10px;color:var(--red);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">FOOT DIAGRAM</div><div style="font-size:11px;color:var(--muted);line-height:1.8"><span style="color:#e8193c">&#9646;</span> Front foot<br/><span style="color:#c9a84c">&#9646;</span> Rear foot<br/><span style="color:#c9a84c">&#9650;</span> Direction</div></div></div>';
+    }
+
+    h += '<div class="card" style="cursor:pointer" onclick="tTO('+i+')">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between">' +
+        '<div>' +
+        '<div style="font-size:15px;font-weight:700;color:var(--white)">'+e(item.name)+'</div>' +
+        '<div style="font-size:12px;color:var(--gold);margin-top:2px">'+e(item.k)+'</div>' +
+        '</div>' +
+        '<span style="color:var(--muted);font-size:16px">'+(isOpen?'&#9662;':'&#9656;')+'</span>' +
+        '</div>' +
+        (isOpen ?
+            '<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:13px;color:var(--text);line-height:1.5">' +
+            e(item.desc) +
+            (item.tgt ? '<div style="font-size:12px;color:var(--muted);margin-top:6px">Target: '+e(item.tgt)+'</div>' : '') +
+            svgDiagram +
+            '</div>'
+        : '') +
+        '</div>';
+});
 
 function rBelt(){
   var g=BREQS[BI];
