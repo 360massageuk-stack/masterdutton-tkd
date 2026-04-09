@@ -12,7 +12,7 @@ body{font-family:"Segoe UI",sans-serif;background:var(--bg);color:var(--text);di
 #app{width:100%;max-width:430px;min-height:100vh;background:var(--bg);display:flex;flex-direction:column}
 .sbar{display:flex;justify-content:space-between;padding:14px 24px 6px;font-size:12px;font-weight:700;color:var(--white)}
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 10px;border-bottom:1px solid var(--border)}
-.logo{font-size:18px;letter-spacing:2px;color:var(--white);font-weight:900;white-space:nowrap}
+.logo{font-size:22px;letter-spacing:2px;color:var(--white);font-weight:900;white-space:nowrap}
 .logo span{color:var(--red)}
 .badge{background:rgba(232,25,60,.15);border:1px solid rgba(232,25,60,.4);color:var(--red);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
 .content{flex:1;overflow-y:auto;padding:16px 20px;scrollbar-width:none}
@@ -98,7 +98,7 @@ body{font-family:"Segoe UI",sans-serif;background:var(--bg);color:var(--text);di
 .pwd-err{color:#e8193c;font-size:13px;text-align:center;min-height:20px;margin-bottom:8px}
 </style></head><body>
 <div id="app">
-<div id="pwd-screen" style="display:flex">
+<div id="pwd-screen">
   <div style="font-size:56px;margin-bottom:10px">&#129355;</div>
   <div class="pwd-logo">TAEKWON<span>-DO</span></div>
   <div style="font-size:14px;letter-spacing:2px;color:#c9a84c;font-weight:700;margin-top:6px">MASTER DUTTON</div>
@@ -157,7 +157,7 @@ var PWD="tkd399";
 window.addEventListener('load',function(){
   if(localStorage.getItem('tkd-auth')===PWD){
     var ps=document.getElementById('pwd-screen');
-    if(ps){ps.style.display='none';ps.style.visibility='hidden';}
+    if(ps)ps.style.display='none';
   }
 });
 function checkPwd(){
@@ -1545,10 +1545,8 @@ function checkPwd(){
   var val=document.getElementById('pwd-input').value.trim().toLowerCase();
   if(val===PWD){
     localStorage.setItem('tkd-auth',PWD);
-    var _ps=document.getElementById('pwd-screen');
-    if(_ps){_ps.style.display='none';_ps.style.visibility='hidden';}
+    document.getElementById('pwd-screen').style.display='none';
     document.getElementById('pwd-err').textContent='';
-    render();
   } else {
     document.getElementById('pwd-err').textContent='Wrong code. Try again.';
     document.getElementById('pwd-input').value='';
@@ -1566,7 +1564,7 @@ document.addEventListener('DOMContentLoaded',function(){
   // Check saved login
   if(localStorage.getItem('tkd-auth')===PWD){
     var ps=document.getElementById('pwd-screen');
-    if(ps){ps.style.display='none';ps.style.visibility='hidden';}
+    if(ps)ps.style.display='none';
   }
   // Set belt badge
   var bb=document.getElementById('belt-badge');
