@@ -1582,4 +1582,90 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 
 </script>
-</body></html>
+  <script>
+(function () {
+  const PASS = "tkd399";
+  const KEY = "tkd_access_ok";
+
+  function showGate() {
+    document.body.innerHTML = `
+      <div style="
+        position:fixed;
+        inset:0;
+        background:#0b0f14;
+        color:#fff;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-family:Arial,sans-serif;
+        z-index:999999;
+      ">
+        <div style="
+          width:90%;
+          max-width:420px;
+          background:#111827;
+          border:1px solid #2a3342;
+          border-radius:16px;
+          padding:24px;
+          box-shadow:0 20px 50px rgba(0,0,0,0.45);
+          text-align:center;
+        ">
+          <h2 style="margin:0 0 10px 0;">Elite TKD App</h2>
+          <p style="margin:0 0 18px 0; color:#cbd5e1;">Enter access code</p>
+          <input id="tkd-pass" type="password" placeholder="Access code" style="
+            width:100%;
+            padding:14px;
+            border-radius:10px;
+            border:1px solid #3b4758;
+            background:#0f172a;
+            color:#fff;
+            font-size:16px;
+            box-sizing:border-box;
+            margin-bottom:12px;
+          ">
+          <button id="tkd-btn" style="
+            width:100%;
+            padding:14px;
+            border:none;
+            border-radius:10px;
+            background:#22c55e;
+            color:#08110b;
+            font-weight:bold;
+            font-size:16px;
+            cursor:pointer;
+          ">Enter</button>
+          <p id="tkd-msg" style="margin:12px 0 0 0; color:#fca5a5; min-height:20px;"></p>
+        </div>
+      </div>
+    `;
+
+    const input = document.getElementById("tkd-pass");
+    const btn = document.getElementById("tkd-btn");
+    const msg = document.getElementById("tkd-msg");
+
+    function check() {
+      if (input.value === PASS) {
+        sessionStorage.setItem(KEY, "yes");
+        location.reload();
+      } else {
+        msg.textContent = "Wrong password";
+        input.value = "";
+        input.focus();
+      }
+    }
+
+    btn.addEventListener("click", check);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") check();
+    });
+
+    input.focus();
+  }
+
+  if (sessionStorage.getItem(KEY) !== "yes") {
+    showGate();
+  }
+})();
+</script>
+</body>
+</html>
